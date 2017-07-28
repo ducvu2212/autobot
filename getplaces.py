@@ -12,6 +12,7 @@ def getplaces() :
 	"This function returns the location of a given place" 
 	r = requests.get(url)
 	output_dict = json.loads(r)
+	#output_dict.get('location')
 	return output_dict['location']
-	
+
 print getplaces()		
