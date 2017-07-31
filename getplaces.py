@@ -14,6 +14,6 @@ def getplaces() :
 	lat = j['latitude']
 	lon = j['longitude']
 	print ('latitude is: \n', lat)
-	print ('longtitude is: \n', long)
+	print ('longtitude is: \n', lon)
 
 print getplaces()		
