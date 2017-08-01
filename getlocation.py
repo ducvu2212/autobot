@@ -11,10 +11,15 @@ def getlocation() :
 	"This function returns the location of a given place" 
 	r = requests.get(url, params=payload)
 	j = json.loads(r.text)
+	
 	if j['status'] == 'OK':
+	
 		for item in j['results']:
-			print (item['geometry']['location'])
-	else:
-		print (j)
-
-print getlocation()	
+			lat = item['geometry']['location']['lat']
+			lng = item['geometry']['location']['lng']
+	else: 
+		print j['status']
+	
+	return lat, lng
+	
+print getlocation()
