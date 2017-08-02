@@ -1,6 +1,9 @@
 import os
+import sys
 import json
 import requests
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 key = os.getenv('key')
 str = raw_input('Enter your location: \n')
@@ -30,8 +33,7 @@ def getlocation():
 l = getlocation()
 lat = l[0]
 lng = l[1]
-payload2 = {
-		# 'location': location, 
+payload2 = { 
 		'radius': 4000, 
 		'type': 'electronics_store', 
 		'keyword': 'sieu+thi+dien+may', 
@@ -43,6 +45,16 @@ url2 = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%
 def getaddress():
 	"This function returns nearest addresses of a given location"
 	r2 = requests.get(url2, params=payload2)
-	return r2.url
+	j2 = json.loads(r2.text)
+	
+	if j2['status'] == 'OK':
+		for item in j2['results']:
+			name = item['name']
+			address = item['vicinity']
+			print ('Store: {} \t Address: {}\n').format(name, address)
+	else:
+		print j2['status']
+	
+	# return name, address
 	
 print getaddress()
