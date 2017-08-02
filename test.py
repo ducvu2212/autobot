@@ -22,22 +22,23 @@ def getlocation():
 		for item in j['results']:
 			lat = item['geometry']['location']['lat']
 			lng = item['geometry']['location']['lng']
+			# loc = item['geometry']['location']
 	else: 
 		print j['status']
 	return lat, lng
 
-location = getlocation()
-lat = location.lat
-lng = location.lng
+l = getlocation()
+lat = l[0]
+lng = l[1]
 payload2 = {
-		'location': [lat, lng], 
+		# 'location': location, 
 		'radius': 4000, 
 		'type': 'electronics_store', 
 		'keyword': 'sieu+thi+dien+may', 
 		'key': key
 }
 
-url2 = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+url2 = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%f,%f' %(lat, lng))
 
 def getaddress():
 	"This function returns nearest addresses of a given location"
