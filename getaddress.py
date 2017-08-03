@@ -2,6 +2,7 @@
 import os, sys
 import json
 import requests
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -11,8 +12,18 @@ keyword = os.getenv('keyword')
 
 str = raw_input('Enter your location: \n')
 
-def geturl1():
-	"This function returns the URL for location search via API"
+def textsearch_url():
+	"""This function returns GG API text search URL from given places.
+	
+	Agrs:
+		None
+		
+	Return:
+		Param1(url): first path of the URL
+		Param2(payload): parameters included in the URL
+	
+	"""
+		
 	payload = {
 			'query': str, 
 			'key': key
@@ -21,8 +32,18 @@ def geturl1():
 	return url, payload
 	
 def getlocation():
-	"This function returns the location of a given place" 
-	u = geturl1()
+	"""This function returns the location of given places.
+
+	Agrs:
+		None.
+		
+	Return:
+		Param1(lat): latitude of the location.
+		Param2(lng): longtitude of the location.
+	
+	"""
+	
+	u = textsearch_url()
 	r = requests.get(u[0], params=u[1])
 	output = json.loads(r.text)
 
@@ -33,36 +54,59 @@ def getlocation():
 			lng = item['geometry']['location']['lng']
 			
 	else: 
-		print output['status']
+		return output['status']
+		
 	return lat, lng
 
-def geturl2():
-
+def nearbysearch_url():
+	
+	"""This function returns GG API nearby search URL from given locations.
+	
+	Agrs:
+		None.
+		
+	Return:
+		Param1(url): first path of the URL.
+		Param2(payload): parameters included in the URL.
+	
+	"""
 	loc = getlocation()
 	lat = loc[0]
 	lng = loc[1]
-	payload2 = { 
+	payload = { 
 			'radius': 4000, 
 			'type': type, 
 			'keyword': keyword, 
 			'key': key
 	}
-
-	url2 = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%f,%f' %(lat, lng))
-	return url2, payload2
+	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng))
+	return url, payload
 
 def result():
-	"This function returns nearest addresses of a given location"
-	u = geturl2()
+	
+	"""This function returns a list of nearest electronic stores around given places.
+	
+	Agrs:
+		None
+		
+	Return:
+		Param1(result): list of nearest electronic stores, include: Store's name and address.
+	
+	"""
+	
+	u = nearbysearch_url()
 	r = requests.get(u[0], params=u[1])
 	output = json.loads(r.text)
 	
 	if output['status'] == 'OK':
+		print ('The list of nearest stores around your place: \n')
+		
 		for item in output['results']:
 			name = (item['name'])
 			address = (item['vicinity'])
-			print ('Store: {} \t Address: {}\n').format(name, address)
+			print ('Store: {}\tAddress: {}\n').format(name, address)
+			
 	else:
-		print output['status']
+		return output['status']
 	
 print result()
