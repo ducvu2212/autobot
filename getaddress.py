@@ -1,14 +1,11 @@
 #!/usr/bin/python
 import os, sys
-import json
 import requests
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 key = os.getenv('key')
-type = os.getenv('type')
-keyword = os.getenv('keyword')
 
 str = raw_input('Enter your location: \n')
 		
@@ -29,16 +26,11 @@ def getlocation():
 	}
 	url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?'
 	r = requests.get(url, params=payload)
-	output = json.loads(r.text)
-
-	if output['status'] == 'OK':
+	output = r.json()
 	
-		for item in output['results']:
-			lat = item['geometry']['location']['lat']
-			lng = item['geometry']['location']['lng']
-			
-	else: 
-		return output['status']
+	for item in output['results']:
+		lat = item['geometry']['location']['lat']
+		lng = item['geometry']['location']['lng']	
 		
 	return lat, lng
 	
@@ -51,7 +43,7 @@ def result():
 		None
 		
 	Return:
-		Param1(result): list of nearest electronic stores, include: Store's name and address.
+		result(string): list of nearest electronic stores, include: Store's name and address.
 	
 	"""
 	loc = getlocation()
@@ -59,24 +51,20 @@ def result():
 	lng = loc[1]
 	payload = { 
 			'radius': 4000, 
-			'type': type, 
-			'keyword': keyword, 
+			'type': 'electronics_store', 
+			'keyword': 'sieu+thi+dien+may', 
 			'key': key
 	}
-	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng))
+	url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng)
 	r = requests.get(url, params=payload)
-	output = json.loads(r.text)
+	output = r.json()
 	
-	if output['status'] == 'OK':
-		print ('The list of nearest stores around your place: \n')
-		
-		for item in output['results']:
-			name = (item['name'])
-			address = (item['vicinity'])
-			print ('Store: {}\tAddress: {}\n').format(name, address)
-			
-	else:
-		return output['status']
+	print ('The list of nearest stores around your place: \n')
+	for item in output['results']:
+		name = (item['name'])
+		address = (item['vicinity'])
+		print ('Store: {}\tAddress: {}\n').format(name, address)
+	
 	return output['status']
 	
 print result()
