@@ -49,10 +49,12 @@ def result():
 	loc = getlocation()
 	lat = loc[0]
 	lng = loc[1]
+	type = 'electronics_store'
+	keyword = 'sieu+thi+dien+may'
 	payload = { 
 			'radius': 4000, 
-			'type': 'electronics_store', 
-			'keyword': 'sieu+thi+dien+may', 
+			'type': type, 
+			'keyword': keyword, 
 			'key': key
 	}
 	url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng)
