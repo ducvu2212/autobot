@@ -11,40 +11,24 @@ type = os.getenv('type')
 keyword = os.getenv('keyword')
 
 str = raw_input('Enter your location: \n')
-
-def textsearch_url():
-	"""This function returns GG API text search URL from given places.
+		
 	
+def getlocation():
+	"""This function returns the location of given places.
 	Agrs:
-		None
+		None.
 		
 	Return:
-		Param1(url): first path of the URL
-		Param2(payload): parameters included in the URL
+		lat(number): latitude of the location.
+		lng(number): longtitude of the location.
 	
 	"""
-		
 	payload = {
 			'query': str, 
 			'key': key
 	}
 	url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?'
-	return url, payload
-	
-def getlocation():
-	"""This function returns the location of given places.
-
-	Agrs:
-		None.
-		
-	Return:
-		Param1(lat): latitude of the location.
-		Param2(lng): longtitude of the location.
-	
-	"""
-	
-	u = textsearch_url()
-	r = requests.get(u[0], params=u[1])
+	r = requests.get(url, params=payload)
 	output = json.loads(r.text)
 
 	if output['status'] == 'OK':
@@ -57,30 +41,7 @@ def getlocation():
 		return output['status']
 		
 	return lat, lng
-
-def nearbysearch_url():
 	
-	"""This function returns GG API nearby search URL from given locations.
-	
-	Agrs:
-		None.
-		
-	Return:
-		Param1(url): first path of the URL.
-		Param2(payload): parameters included in the URL.
-	
-	"""
-	loc = getlocation()
-	lat = loc[0]
-	lng = loc[1]
-	payload = { 
-			'radius': 4000, 
-			'type': type, 
-			'keyword': keyword, 
-			'key': key
-	}
-	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng))
-	return url, payload
 
 def result():
 	
@@ -93,9 +54,17 @@ def result():
 		Param1(result): list of nearest electronic stores, include: Store's name and address.
 	
 	"""
-	
-	u = nearbysearch_url()
-	r = requests.get(u[0], params=u[1])
+	loc = getlocation()
+	lat = loc[0]
+	lng = loc[1]
+	payload = { 
+			'radius': 4000, 
+			'type': type, 
+			'keyword': keyword, 
+			'key': key
+	}
+	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng))
+	r = requests.get(url, params=payload)
 	output = json.loads(r.text)
 	
 	if output['status'] == 'OK':
@@ -108,5 +77,6 @@ def result():
 			
 	else:
 		return output['status']
+	return output['status']
 	
 print result()
