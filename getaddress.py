@@ -5,10 +5,8 @@ import requests
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-key = os.getenv('key')
-
+KEY = os.getenv('key')
 str = raw_input('Enter your location: \n')
-		
 	
 def getlocation():
 	"""This function returns the location of given places.
@@ -22,7 +20,7 @@ def getlocation():
 	"""
 	payload = {
 			'query': str, 
-			'key': key
+			'key': KEY
 	}
 	url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?'
 	r = requests.get(url, params=payload)
@@ -49,13 +47,13 @@ def result():
 	loc = getlocation()
 	lat = loc[0]
 	lng = loc[1]
-	type = 'electronics_store'
+	search_type = 'electronics_store'
 	keyword = 'sieu+thi+dien+may'
 	payload = { 
 			'radius': 4000, 
-			'type': type, 
+			'type': search_type, 
 			'keyword': keyword, 
-			'key': key
+			'key': KEY
 	}
 	url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}'.format(lat, lng)
 	r = requests.get(url, params=payload)
@@ -63,8 +61,8 @@ def result():
 	
 	print ('The list of nearest stores around your place: \n')
 	for item in output['results']:
-		name = (item['name'])
-		address = (item['vicinity'])
+		name = item['name']
+		address = item['vicinity']
 		print ('Store: {}\tAddress: {}\n').format(name, address)
 	
 	return output['status']
