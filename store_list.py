@@ -67,7 +67,7 @@ def result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 		t.add_row([name, address])
 	t.set_deco(t.HEADER | t.VLINES | t.HLINES)
 	t.set_cols_width([60, 80])
-	t.set_cols_align(['l','l'])
+	t.set_cols_align(['l','c'])
 	t.set_cols_valign(['t','t'])
 	print t.draw().encode('utf-8')
 	
