@@ -1,9 +1,7 @@
 #!/usr/bin/python
 import os, sys
 import requests
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# -*- coding: utf-8 -*-
 
 KEY = os.getenv('key')
 str = raw_input('Enter your location: \n')
@@ -33,7 +31,7 @@ def getlocation():
 	return lat, lng
 	
 
-def result():
+def result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 	
 	"""This function returns a list of nearest electronic stores around given places.
 	
@@ -47,8 +45,6 @@ def result():
 	loc = getlocation()
 	lat = loc[0]
 	lng = loc[1]
-	search_type = 'electronics_store'
-	keyword = 'sieu+thi+dien+may'
 	payload = { 
 			'radius': 4000, 
 			'type': search_type, 
@@ -60,10 +56,19 @@ def result():
 	output = r.json()
 	
 	print ('The list of nearest stores around your place: \n')
+	from texttable import Texttable
+	t = Texttable()
+	t.add_row(['Store', 'Address'])
+	
 	for item in output['results']:
 		name = item['name']
 		address = item['vicinity']
-		print ('Store: {}\tAddress: {}\n').format(name, address)
+		t.add_row([name, address])
+	t.set_deco(t.HEADER | t.VLINES | t.HLINES)
+	t.set_cols_width([60, 80])
+	t.set_cols_align(['l','l'])
+	t.set_cols_valign(['t','t'])
+	print t.draw().encode('utf-8')
 	
 	return output['status']
 	
