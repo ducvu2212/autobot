@@ -36,7 +36,8 @@ def result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 	"""This function returns a list of nearest electronic stores around given places.
 	
 	Agrs:
-		None
+		search_type(string): parameter in url
+		keyword(string): parameter in url
 		
 	Return:
 		result(string): list of nearest electronic stores, include: Store's name and address.
