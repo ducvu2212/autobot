@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 import os, sys
 import requests
-# -*- coding: utf-8 -*-
 
 KEY = os.getenv('key')
 str = raw_input('Enter your location: \n')
@@ -31,21 +31,20 @@ def getlocation():
 	return lat, lng
 	
 
-def result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
+def store_list(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 	
 	"""This function returns a list of nearest electronic stores around given places.
 	
-	Agrs:
+	Params:
 		search_type(string): parameter in url
 		keyword(string): parameter in url
 		
 	Return:
-		result(string): list of nearest electronic stores, include: Store's name and address.
+		store_data(string): return a list of store's name and address
 	
 	"""
-	loc = getlocation()
-	lat = loc[0]
-	lng = loc[1]
+	lat = getlocation()[0]
+	lng = getlocation()[1]
 	payload = { 
 			'radius': 4000, 
 			'type': search_type, 
@@ -56,21 +55,10 @@ def result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 	r = requests.get(url, params=payload)
 	output = r.json()
 	
-	print ('The list of nearest stores around your place: \n')
-	from texttable import Texttable
-	t = Texttable()
-	t.add_row(['Store', 'Address'])
-	
 	for item in output['results']:
-		name = item['name']
-		address = item['vicinity']
-		t.add_row([name, address])
-	t.set_deco(t.HEADER | t.VLINES | t.HLINES)
-	t.set_cols_width([60, 80])
-	t.set_cols_align(['l','c'])
-	t.set_cols_valign(['t','t'])
-	print t.draw().encode('utf-8')
-	
-	return output['status']
+		name = item['name'].encode('utf-8')
+		address = item['vicinity'].encode('utf-8')
+		store_data = [name, address]
+		yield store_data
 	
 print result()
