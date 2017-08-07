@@ -12,8 +12,8 @@ def getlocation():
 		None.
 		
 	Return:
-		lat(number): latitude of the location.
-		lng(number): longtitude of the location.
+		lat(float): Latitude of the location.
+		lng(float): Longtitude of the location.
 	
 	"""
 	payload = {
@@ -31,16 +31,16 @@ def getlocation():
 	return lat, lng
 	
 
-def store_list(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
+def store_result(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may'):
 	
 	"""This function returns a list of nearest electronic stores around given places.
 	
 	Params:
-		Param1: search_type(string): parameter in url
-		Param2: keyword(string): parameter in url
+		search_type(string): Value of 'type' in "payload" dictionary.
+		keyword(string): Value of 'keyword' in "payload" dictionary.
 		
 	Return:
-		store_data(list): return a list of store's name and address
+		store_data(tuple): return a list of store's name and address
 	
 	"""
 	lat = getlocation()[0]
@@ -58,7 +58,7 @@ def store_list(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may')
 	for item in output['results']:
 		name = item['name']
 		address = item['vicinity']
-		store_data = [name, address]
+		store_data = (name, address)
 		yield store_data
-		
-print (list(store_list(10)))
+	
+print list(store_result())
