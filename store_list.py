@@ -56,9 +56,9 @@ def store_list(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may')
 	output = r.json()
 	
 	for item in output['results']:
-		name = item['name'].encode('utf-8')
-		address = item['vicinity'].encode('utf-8')
+		name = item['name']
+		address = item['vicinity']
 		store_data = [name, address]
 		yield store_data
-	
-print result()
+		
+print (list(store_list(10)))
