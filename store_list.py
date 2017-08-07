@@ -36,11 +36,11 @@ def store_list(search_type = 'electronics_store', keyword = 'sieu+thi+dien+may')
 	"""This function returns a list of nearest electronic stores around given places.
 	
 	Params:
-		search_type(string): parameter in url
-		keyword(string): parameter in url
+		Param1: search_type(string): parameter in url
+		Param2: keyword(string): parameter in url
 		
 	Return:
-		store_data(string): return a list of store's name and address
+		store_data(list): return a list of store's name and address
 	
 	"""
 	lat = getlocation()[0]
