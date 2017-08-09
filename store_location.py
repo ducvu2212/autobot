@@ -15,6 +15,7 @@ def user_location(location=raw_input('Enter your location: \n')):
 		lng(float): Longtitude of the location.
 	
 	"""
+	
 	payload = {
 			'query': location, 
 			'key': KEY
@@ -54,5 +55,3 @@ def store_location(search_type = 'electronics_store', keyword = 'sieu thi dien m
 		name = item['name']
 		address = item['vicinity']
 		yield name, address
-	
-list(store_location())
